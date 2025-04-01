@@ -4,17 +4,25 @@
 // Sets default values
 AAudioAdventureCharacter::AAudioAdventureCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  
 	PrimaryActorTick.bCanEverTick = true;
 
 	bIsRunning = false;
 	runSpeedMulti = 1.8f;
 
-	// Set default walking speed (MaxWalkSpeed) in the CharacterMovementComponent
+	bIsCrouching = false;
+	crouchSpeedMulti = 0.5f; // Crouching reduces speed to 50%
+
+	// Set default movement settings
 	UCharacterMovementComponent* CharMovement = GetCharacterMovement();
 	if (CharMovement)
 	{
-		CharMovement->MaxWalkSpeed = 600.0f; // Default walking speed, you can adjust this
+		CharMovement->GravityScale = 2.0f;
+		CharMovement->MaxWalkSpeed = 250.0f;
+		CharMovement->AirControl = 1.0f;
+		CharMovement->JumpZVelocity = 600.0f;
+		CharMovement->NavAgentProps.bCanCrouch = true; // Enable crouching
+		CharMovement->bCanWalkOffLedgesWhenCrouching = true;
 	}
 }
 
@@ -22,14 +30,12 @@ AAudioAdventureCharacter::AAudioAdventureCharacter()
 void AAudioAdventureCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
 void AAudioAdventureCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -46,40 +52,73 @@ void AAudioAdventureCharacter::SetupPlayerInputComponent(UInputComponent* Player
 
 	PlayerInputComponent->BindAction(TEXT("Run"), IE_Pressed, this, &AAudioAdventureCharacter::StartRun);
 	PlayerInputComponent->BindAction(TEXT("Run"), IE_Released, this, &AAudioAdventureCharacter::StartWalk);
+
+	// Bind Crouch actions
+	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Pressed, this, &AAudioAdventureCharacter::StartCrouch);
+	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Released, this, &AAudioAdventureCharacter::StopCrouch);
 }
 
 void AAudioAdventureCharacter::MoveX(float axisVal)
 {
 	float currentSpeed = bIsRunning ? runSpeedMulti : 1.0f;
+	currentSpeed = bIsCrouching ? crouchSpeedMulti : currentSpeed;
 	AddMovementInput(GetActorForwardVector() * axisVal * currentSpeed);
 }
 
 void AAudioAdventureCharacter::MoveY(float axisVal)
 {
 	float currentSpeed = bIsRunning ? runSpeedMulti : 1.0f;
+	currentSpeed = bIsCrouching ? crouchSpeedMulti : currentSpeed;
 	AddMovementInput(GetActorRightVector() * axisVal * currentSpeed);
 }
 
 void AAudioAdventureCharacter::StartRun()
 {
-	bIsRunning = true;
-
-	// Increase MaxWalkSpeed when running
-	UCharacterMovementComponent* CharMovement = GetCharacterMovement();
-	if (CharMovement)
+	if (!bIsCrouching) // Prevent running while crouching
 	{
-		CharMovement->MaxWalkSpeed *= runSpeedMulti; // Increase movement speed
+		bIsRunning = true;
+		UCharacterMovementComponent* CharMovement = GetCharacterMovement();
+		if (CharMovement)
+		{
+			CharMovement->MaxWalkSpeed *= runSpeedMulti; // Increase movement speed
+		}
 	}
 }
 
 void AAudioAdventureCharacter::StartWalk()
 {
 	bIsRunning = false;
-
-	// Reset MaxWalkSpeed to normal walking speed
 	UCharacterMovementComponent* CharMovement = GetCharacterMovement();
 	if (CharMovement)
 	{
 		CharMovement->MaxWalkSpeed /= runSpeedMulti; // Reset to walking speed
+	}
+}
+
+void AAudioAdventureCharacter::StartCrouch()
+{
+	if (!bIsCrouching)
+	{
+		bIsCrouching = true;
+		Crouch();
+		UCharacterMovementComponent* CharMovement = GetCharacterMovement();
+		if (CharMovement)
+		{
+			CharMovement->MaxWalkSpeed *= crouchSpeedMulti; // Reduce speed when crouching
+		}
+	}
+}
+
+void AAudioAdventureCharacter::StopCrouch()
+{
+	if (bIsCrouching)
+	{
+		bIsCrouching = false;
+		UnCrouch();
+		UCharacterMovementComponent* CharMovement = GetCharacterMovement();
+		if (CharMovement)
+		{
+			CharMovement->MaxWalkSpeed /= crouchSpeedMulti; // Reset to normal speed
+		}
 	}
 }
