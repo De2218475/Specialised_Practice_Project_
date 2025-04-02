@@ -11,7 +11,7 @@ AAudioAdventureCharacter::AAudioAdventureCharacter()
 	runSpeedMulti = 1.8f;
 
 	bIsCrouching = false;
-	crouchSpeedMulti = 0.5f; // Crouching reduces speed to 50%
+	crouchSpeedMulti = 0.75f; // Crouching reduces speed to 50%
 
 	// Set default movement settings
 	UCharacterMovementComponent* CharMovement = GetCharacterMovement();
@@ -23,6 +23,9 @@ AAudioAdventureCharacter::AAudioAdventureCharacter()
 		CharMovement->JumpZVelocity = 600.0f;
 		CharMovement->NavAgentProps.bCanCrouch = true; // Enable crouching
 		CharMovement->bCanWalkOffLedgesWhenCrouching = true;
+		CharMovement->MaxWalkSpeedCrouched = 150.f;
+		CharMovement->GroundFriction = 4.0f;
+		CharMovement->BrakingDecelerationWalking = 0.0f;
 	}
 }
 
