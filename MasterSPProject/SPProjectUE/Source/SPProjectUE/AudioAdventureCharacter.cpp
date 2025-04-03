@@ -1,6 +1,8 @@
 #include "AudioAdventureCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
+#include "RevealActorBase.h"
+
 // Sets default values
 AAudioAdventureCharacter::AAudioAdventureCharacter()
 {
@@ -66,7 +68,7 @@ void AAudioAdventureCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Pressed, this, &AAudioAdventureCharacter::StartCrouch);
 	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Released, this, &AAudioAdventureCharacter::StopCrouch);
 
-	PlayerInputComponent->BindAction(TEXT("ShootRay"), IE_Released, this, &AAudioAdventureCharacter::Ray);
+	PlayerInputComponent->BindAction(TEXT("ShootCast"), IE_Released, this, &AAudioAdventureCharacter::Ray);
 }
 
 void AAudioAdventureCharacter::MoveX(float axisVal)
@@ -136,4 +138,39 @@ void AAudioAdventureCharacter::StopCrouch()
 
 void AAudioAdventureCharacter::Ray()
 {
+	if (!CameraComponent || !GetWorld()) return; // Safety check
+
+	FVector start = CameraComponent->GetComponentLocation(); // Start from the camera
+	FVector forward = CameraComponent->GetForwardVector();
+	FVector end = start + (forward * 100.0f); // Trace units ahead
+
+	FHitResult hit;
+	FCollisionQueryParams queryParams;
+	queryParams.AddIgnoredActor(this); // Ignore self
+
+	// Perform the line trace
+	bool actorHit = GetWorld()->LineTraceSingleByChannel(hit, start, end, ECC_Visibility, queryParams);
+
+	// Draw the debug line
+	DrawDebugLine(GetWorld(), start, end, FColor::Red, false, 2.f, 0, 2.f);
+
+	// If we hit something, print the name of the actor
+	if (actorHit && hit.GetActor())
+	{
+		// Try to cast the hit actor to your custom actor class
+		ARevealActorBase* hitActor = Cast<ARevealActorBase>(hit.GetActor());
+
+		// Check if the cast is successful
+		if (hitActor)
+		{
+			// Successfully cast to ARevealActorBase, you can now interact with hitActor
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, TEXT("Hit ARevealActorBase!"));
+			hitActor->RevealActor();
+		}
+		else
+		{
+			// It's not of type ARevealActorBase, print its name
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, hit.GetActor()->GetFName().ToString());
+		}
+	}
 }
