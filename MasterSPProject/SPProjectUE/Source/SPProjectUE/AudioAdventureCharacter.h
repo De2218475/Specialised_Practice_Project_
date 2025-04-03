@@ -2,6 +2,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "GameFramework/Actor.h"
+#include "Engine/World.h"
+#include "DrawDebugHelpers.h"
 #include "AudioAdventureCharacter.generated.h"
 
 UCLASS()
@@ -16,6 +21,10 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* CameraComponent;
+
 
 public:
 	// Called every frame
@@ -35,6 +44,8 @@ protected:
 	// Crouching functions
 	void StartCrouch();
 	void StopCrouch();
+
+	void Ray();
 
 private:
 

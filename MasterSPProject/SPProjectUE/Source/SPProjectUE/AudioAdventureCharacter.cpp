@@ -7,6 +7,11 @@ AAudioAdventureCharacter::AAudioAdventureCharacter()
 	// Set this character to call Tick() every frame.  
 	PrimaryActorTick.bCanEverTick = true;
 
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	CameraComponent->SetupAttachment(GetCapsuleComponent());
+	CameraComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 40.0f));
+	CameraComponent->bUsePawnControlRotation = true;
+
 	bIsRunning = false;
 	runSpeedMulti = 1.8f;
 
@@ -19,6 +24,7 @@ AAudioAdventureCharacter::AAudioAdventureCharacter()
 	{
 		CharMovement->GravityScale = 2.0f;
 		CharMovement->MaxWalkSpeed = 250.0f;
+		CharMovement->MaxAcceleration = 1500.0f;
 		CharMovement->AirControl = 1.0f;
 		CharMovement->JumpZVelocity = 600.0f;
 		CharMovement->NavAgentProps.bCanCrouch = true; // Enable crouching
@@ -59,6 +65,8 @@ void AAudioAdventureCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	// Bind Crouch actions
 	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Pressed, this, &AAudioAdventureCharacter::StartCrouch);
 	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Released, this, &AAudioAdventureCharacter::StopCrouch);
+
+	PlayerInputComponent->BindAction(TEXT("ShootRay"), IE_Released, this, &AAudioAdventureCharacter::Ray);
 }
 
 void AAudioAdventureCharacter::MoveX(float axisVal)
@@ -124,4 +132,8 @@ void AAudioAdventureCharacter::StopCrouch()
 			CharMovement->MaxWalkSpeed /= crouchSpeedMulti; // Reset to normal speed
 		}
 	}
+}
+
+void AAudioAdventureCharacter::Ray()
+{
 }
