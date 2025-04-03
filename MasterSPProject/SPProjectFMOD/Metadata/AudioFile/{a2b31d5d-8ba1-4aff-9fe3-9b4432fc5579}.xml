@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{a2b31d5d-8ba1-4aff-9fe3-9b4432fc5579}">
+		<property name="assetPath">
+			<value>Concrete_Boots_Running - Region #6.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>0.34412500000000001</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{e8c6ed2e-c784-4a31-a945-5e12cc46aba4}</destination>
+		</relationship>
+	</object>
+</objects>
