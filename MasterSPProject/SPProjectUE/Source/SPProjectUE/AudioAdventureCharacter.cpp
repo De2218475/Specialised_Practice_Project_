@@ -157,6 +157,9 @@ void AAudioAdventureCharacter::Ray()
 	// If we hit something, print the name of the actor
 	if (actorHit && hit.GetActor())
 	{
+
+		OnRaycastHit.Broadcast(hit.GetActor());
+
 		// Try to cast the hit actor to your custom actor class
 		ARevealActorBase* hitActor = Cast<ARevealActorBase>(hit.GetActor());
 

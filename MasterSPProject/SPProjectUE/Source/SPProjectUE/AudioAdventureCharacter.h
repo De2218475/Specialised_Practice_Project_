@@ -9,6 +9,9 @@
 #include "DrawDebugHelpers.h"
 #include "AudioAdventureCharacter.generated.h"
 
+// Declare a delegate that sends the hit actor to Blueprints
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRaycastHit, AActor*, HitActor);
+
 UCLASS()
 class SPPROJECTUE_API AAudioAdventureCharacter : public ACharacter
 {
@@ -32,6 +35,10 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	// Make the event accessible to Blueprints
+	UPROPERTY(BlueprintAssignable, Category = "Raycast")
+	FOnRaycastHit OnRaycastHit;
 
 protected:
 
