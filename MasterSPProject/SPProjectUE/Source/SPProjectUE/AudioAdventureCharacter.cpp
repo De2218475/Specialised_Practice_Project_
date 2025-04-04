@@ -168,7 +168,7 @@ void AAudioAdventureCharacter::Ray()
 		{
 			// Successfully cast to ARevealActorBase, you can now interact with hitActor
 			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, TEXT("Hit ARevealActorBase!"));
-			hitActor->RevealActor();
+			hitActor->RevealActor(); 
 		}
 		else
 		{
