@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{1bc2821d-fc3f-4dd4-a6bb-e23350a19384}">
+		<property name="assetPath">
+			<value>thump-bang-38432 - Region #3.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>1</value>
+		</property>
+		<property name="length">
+			<value>0.9273541666666667</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{e8c6ed2e-c784-4a31-a945-5e12cc46aba4}</destination>
+		</relationship>
+	</object>
+</objects>
