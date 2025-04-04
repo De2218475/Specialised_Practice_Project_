@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{9733f561-df12-4f02-a350-ac40934c2a7d}">
+		<property name="assetPath">
+			<value>room-with-buzz-incandescent-light-bulb-23892.mp3</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>24</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>117.504</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{e8c6ed2e-c784-4a31-a945-5e12cc46aba4}</destination>
+		</relationship>
+	</object>
+</objects>
